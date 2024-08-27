@@ -20,3 +20,12 @@ func FindUserByEmail(email string) (models.User, error) {
 	}
 	return user, nil
 }
+
+func GetUserNameByID(userID uint) (string, error) {
+	var user models.User
+	err := database.DB.Where("user_id = ?", userID).First(&user).Error
+	if err != nil {
+		return "", errors.New("user not found")
+	}
+	return user.UserName, nil
+}

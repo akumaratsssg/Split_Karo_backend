@@ -29,6 +29,7 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 		auth.POST("/register", controllers.Register)
 		auth.POST("/login", controllers.Login)
 		auth.POST("/logout", controllers.Logout)
+		auth.GET("/search_user", middlewares.JWTAuthentication(), controllers.SearchUserByUsername)
 	}
 
 	u_group := router.Group("/group")
@@ -37,6 +38,17 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 		u_group.GET("/get_groups", middlewares.JWTAuthentication(), groupController.GetGroups)
 		u_group.POST("/add_member", middlewares.JWTAuthentication(), controllers.AddMemberByGroupNameAndEmail)
 		u_group.DELETE("/remove_member", middlewares.JWTAuthentication(), controllers.RemoveMemberByGroupNameAndEmail)
+		u_group.GET("/get_members", middlewares.JWTAuthentication(), controllers.GetMembersByGroupName)
+
 	}
+
+	exp := router.Group("/expense")
+	{
+
+		exp.POST("create_expense", middlewares.JWTAuthentication(), controllers.AddExpenseToGroup)
+		exp.POST("create_balance", middlewares.JWTAuthentication(), controllers.CreateBalance)
+		exp.GET("get_balance", middlewares.JWTAuthentication(), controllers.GetGroupBalances)
+	}
+
 	return router
 }

@@ -11,7 +11,7 @@ import (
 
 type GroupMemberRequest struct {
 	GroupName string `json:"group_name" binding:"required"`
-	Email     string `json:"email" binding:"required,email"`
+	Email     string `json:"user_email" binding:"required,email"`
 }
 
 func AddMemberByGroupNameAndEmail(c *gin.Context) {
